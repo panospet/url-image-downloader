@@ -21,29 +21,29 @@ def is_url_up(full_url):
     else:
         return False
 
-
-url, input_url = ask_user_for_url()
-while not is_url_up(url):
-    print "The url you gave is DOWN!!"
+if __name__ == '__main__':
     url, input_url = ask_user_for_url()
+    while not is_url_up(url):
+        print "The url you gave is DOWN!!"
+        url, input_url = ask_user_for_url()
 
-page_source = urllib2.urlopen(url)
-page_source = page_source.read()
+    page_source = urllib2.urlopen(url)
+    page_source = page_source.read()
 
-extensions_wanted = ['.png', '.jpg', '.jpeg', '.bmp', '.gif']
+    extensions_wanted = ['.png', '.jpg', '.jpeg', '.bmp', '.gif']
 
-matches = re.findall(r'\ssrc="([^"]+)"', page_source)
-images = []
+    matches = re.findall(r'\ssrc="([^"]+)"', page_source)
+    images = []
 
-for i in matches:
-    if i.endswith(tuple(extensions_wanted)):
-        if i.startswith('http'):
-            images.append(i)
-        else:
-            images.append(url + i)
+    for i in matches:
+        if i.endswith(tuple(extensions_wanted)):
+            if i.startswith('http'):
+                images.append(i)
+            else:
+                images.append(url + i)
 
-if not os.path.exists(input_url):
-    os.makedirs(input_url)
+    if not os.path.exists(input_url):
+        os.makedirs(input_url)
 
-for i in images:
-    urllib.urlretrieve(i, input_url + '/' + i.split('/')[-1])
+    for i in images:
+        urllib.urlretrieve(i, input_url + '/' + i.split('/')[-1])
